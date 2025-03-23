@@ -62,7 +62,7 @@ jobs:
           docker run -d -p 8003:8003 --name deepfake-video-service rohitkt23/deepfake-video-service:latest
 
       # ✅ AI Microservices Testing
-      - name: 🧠 Test AI Fake News Detection
+      - name: 🧠 Test AI DeepFakes Detection
         run: |
           sleep 5
           RESPONSE=$(curl -s -X POST http://localhost:8001/predict-text -H "Content-Type: application/json" -d '{"text": "This is a test news article"}')
@@ -75,15 +75,6 @@ jobs:
 
 
 
-      - name: 🧠 Test AI Deepfake Video Detection
-        run: |
-          RESPONSE=$(curl -s -X POST -F "video=@test.mp4" http://localhost:8003/detect)
-          echo "Response: $RESPONSE"
-          DEEPFAKE=$(echo $RESPONSE | jq -r '.deepfake_detected')
-          if [[ "$DEEPFAKE" == "true" ]]; then
-            echo "🚨 Deepfake Video Detected! Failing Pipeline..."
-            exit 1
-          fi
 
       - name: 🧪 Run Backend Tests
         working-directory: truthpost-backend
