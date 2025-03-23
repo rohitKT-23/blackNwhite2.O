@@ -22,10 +22,16 @@ const upload = multer({ storage });
 // 📝 Submit article with AI analysis
 router.post("/", upload.single("media"), async (req, res) => {
   try {
+    console.log("Request Body:", req.body);
+    console.log("File Info:", req.file);
+
     const { title, content } = req.body;
     const mediaUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
-    // Step 1: Save as "pending" in MongoDB
+    if (!title || !content) {
+      return res.status(400).json({ error: "Title and content are required" });
+    }
+
     const newArticle = new Article({
       title,
       content,
@@ -35,65 +41,72 @@ router.post("/", upload.single("media"), async (req, res) => {
     });
     await newArticle.save();
 
-    // Step 2: Call AI services
-    const textScan = await axios.post("http://localhost:8001/predict-text", { text: content });
-    const textResult = textScan.data;
+    let textResult = {};
+    try {
+      const textScan = await axios.post("http://localhost:8001/predict-text", { text: content });
+      textResult = textScan.data;
+      console.log("Text Analysis Response:", textResult); // Log text analysis response
+    } catch (err) {
+      console.error("Error during text scan:", err.message);
+      return res.status(500).json({ error: "Error during text scan" });
+    }
+
     let mediaResult = { label: "No Media", confidence: 0 };
 
     if (req.file) {
       const fileExt = req.file.originalname.split('.').pop().toLowerCase();
       const formData = new FormData();
       const fileStream = fs.createReadStream(req.file.path);
-    
-      if (["jpg", "jpeg", "png"].includes(fileExt)) {
-        formData.append("image", fileStream);
-    
-        const imageScan = await axios.post("http://localhost:8002/predict-image", formData, {
-          headers: { ...formData.getHeaders() },
-        });
-    
-        mediaResult = {
-          label: imageScan.data.label || "unknown",
-          confidence: imageScan.data.confidence || 0,
-        };
-    
-      } else if (["mp4", "mov", "avi"].includes(fileExt)) {
-        formData.append("file", fileStream); // key must match FastAPI endpoint
-    
-        const videoScan = await axios.post("http://localhost:8003/predict-video", formData, {
-          headers: { ...formData.getHeaders() },
-        });
-    
-        mediaResult = {
-          label: videoScan.data.deepfake_detected ? "deepfake" : "real",
-          confidence: videoScan.data.confidence,
-        };
+
+      try {
+        if (["jpg", "jpeg", "png"].includes(fileExt)) {
+          formData.append("image", fileStream);
+          const imageScan = await axios.post("http://localhost:8002/predict-image", formData, {
+            headers: { ...formData.getHeaders() },
+          });
+          mediaResult = {
+            label: imageScan.data.label || "unknown",
+            confidence: imageScan.data.confidence || 0,
+          };
+          console.log("Image Analysis Response:", imageScan.data); // Log image analysis response
+        } else if (["mp4", "mov", "avi"].includes(fileExt)) {
+          formData.append("file", fileStream);
+          const videoScan = await axios.post("http://localhost:8003/detect", formData, {
+            headers: { ...formData.getHeaders() },
+          });
+          mediaResult = {
+            label: videoScan.data.deepfake_detected ? "deepfake" : "real",
+            confidence: videoScan.data.confidence,
+          };
+          console.log("Video Analysis Response:", videoScan.data); // Log video analysis response
+        }
+      } catch (err) {
+        console.error("Error during media scan:", err.message);
+        return res.status(500).json({ error: "Error during media scan" });
       }
     }
-    
 
-    // Step 3: Determine article status
     let status = "approved";
-
-    const textLabel = textResult.label.toLowerCase();
+    const textLabel = textResult.label ? textResult.label.toLowerCase() : "unknown";
     const mediaLabel = mediaResult.label.toLowerCase();
+
     if (textLabel === "fake news" || mediaLabel === "deepfake") {
       status = "rejected";
     }
 
-    // Step 4: Update article status
     newArticle.status = status;
     await newArticle.save();
 
-    // Step 5: Send response
-    res.json({
+    const response = {
       message: "Article submitted successfully",
       articleId: newArticle._id,
       textAnalysis: textResult,
       mediaAnalysis: mediaResult,
       finalStatus: status,
-    });
+    };
 
+    console.log("Sending response to frontend:", response); // Log final response
+    res.json(response);
   } catch (error) {
     console.error("Error processing article:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
