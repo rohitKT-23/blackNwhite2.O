@@ -85,7 +85,7 @@ jobs:
 
       - name: 🧠 Test AI Deepfake Video Detection
         run: |
-          RESPONSE=$(curl -s -X POST -F "video=@test.mp4" http://localhost:8003/predict-video)
+          RESPONSE=$(curl -s -X POST -F "video=@test.mp4" http://localhost:8003/detect)
           echo "Response: $RESPONSE"
           DEEPFAKE=$(echo $RESPONSE | jq -r '.deepfake_detected')
           if [[ "$DEEPFAKE" == "true" ]]; then
