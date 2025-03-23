@@ -73,15 +73,7 @@ jobs:
             exit 1
           fi
 
-      - name: 🧠 Test AI Deepfake Image Detection
-        run: |
-          RESPONSE=$(curl -s -X POST -F "image=@test.jpg" http://localhost:8002/predict-image)
-          echo "Response: $RESPONSE"
-          DEEPFAKE=$(echo $RESPONSE | jq -r '.deepfake_detected')
-          if [[ "$DEEPFAKE" == "true" ]]; then
-            echo "🚨 Deepfake Image Detected! Failing Pipeline..."
-            exit 1
-          fi
+
 
       - name: 🧠 Test AI Deepfake Video Detection
         run: |

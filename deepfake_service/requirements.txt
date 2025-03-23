@@ -5,3 +5,4 @@ torchvision
 opencv-python
 face_recognition
 Pillow
+transformers
