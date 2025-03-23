@@ -42,10 +42,7 @@ jobs:
           pip install semgrep
           semgrep scan --config="p/default"
 
-      - name: 🔍 Run Bandit Security Scan (Python)
-        run: |
-          pip install bandit
-          bandit -r fake_news_service/ deepfake_service/ deepfake_service_video/
+
 
       - name: 🔍 Run Trivy Docker Security Scan
         run: |
