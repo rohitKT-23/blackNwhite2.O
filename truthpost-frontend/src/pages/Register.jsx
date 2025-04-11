@@ -16,19 +16,63 @@ const Register = () => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  const validateForm = () => {
+    const { name, email, password, confirmPassword, phone } = form;
+  
+    // Name validation (only letters and spaces)
+    if (!/^[a-zA-Z\s]+$/.test(name)) {
+      setError("Name must contain only letters.");
+      return false;
+    }
+  
+    // Email validation
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      setError("Please enter a valid email address.");
+      return false;
+    }
+  
+    // Phone validation (basic international format)
+    if (!/^\+?[0-9]{7,15}$/.test(phone)) {
+      setError("Please enter a valid phone number.");
+      return false;
+    }
+  
+    // Password strength validation
+    if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password)
+    ) {
+      setError(
+        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character."
+      );
+      return false;
+    }
+  
+    // Confirm password match
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return false;
+    }
+  
+    return true;
+  };
+  
   const handleRegister = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     setError("");
-
+  
+    if (!validateForm()) return;
+  
+    setIsLoading(true);
+  
     try {
       const res = await fetch("http://localhost:5000/api/user/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+  
       const data = await res.json();
-
+  
       if (res.ok) {
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("isLogin", true);
@@ -42,6 +86,7 @@ const Register = () => {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
