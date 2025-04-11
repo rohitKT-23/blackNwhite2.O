@@ -25,7 +25,7 @@ function Landing() {
 
       <div className="relative z-10 text-center max-w-4xl space-y-8 animate-fadeIn">
         <h1 className="text-7xl md:text-8xl font-bold bg-gradient-to-r from-gray-100 via-gray-300 to-gray-500 bg-clip-text text-transparent">
-          BLACKNWHITE
+          BLACK-N-WHITE
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mt-8">
@@ -71,20 +71,20 @@ function Landing() {
         
         @keyframes float {
           0% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(5deg); }
+          50% { transform: translateY(-50px) rotate(5deg); }
           100% { transform: translateY(0px) rotate(0deg); }
         }
 
         .animate-fadeIn {
-          animation: fadeIn 1s ease-out;
+          animation: fadeIn 3s ease-out;
         }
 
         .animate-float {
-          animation: float 8s ease-in-out infinite;
+          animation: float 15s ease-in-out infinite;
         }
 
         .animate-float-delayed {
-          animation: float 8s ease-in-out infinite 2s;
+          animation: float 15s ease-in-out infinite 2s;
         }
       `}</style>
     </div>
