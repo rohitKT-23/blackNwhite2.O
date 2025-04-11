@@ -1,32 +1,37 @@
-# Use Python 3.9 slim as base image
+# Use a lightweight base Python image
 FROM python:3.9-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies for OpenCV, CMake, and build tools
+# System dependencies for OpenCV, dlib, face-recognition etc.
 RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
+    build-essential \
     cmake \
     g++ \
-    && rm -rf /var/lib/apt/lists/*  # Clean up
+    git \
+    curl \
+    libglib2.0-0 \
+    libgl1-mesa-glx \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy only requirements file first for better caching
-COPY requirements.txt requirements.txt
+# Copy the requirements first to utilize Docker cache
+COPY requirements.txt .
 
-# Upgrade pip and install dependencies with increased timeout
-RUN pip install --upgrade pip \
-    && pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
+# Upgrade pip and install dependencies
+RUN pip install --upgrade pip --no-cache-dir && \
+    pip install --default-timeout=1000 --no-cache-dir -r requirements.txt uvicorn
 
-# Ensure Uvicorn is installed
-RUN pip install uvicorn
-
-# Copy the rest of the application files
+# Copy rest of the app
 COPY . .
 
-# Expose the port for FastAPI
-EXPOSE 8002
+# Expose app port
+EXPOSE 8000
 
-# Command to run FastAPI app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8002"]
+# Default command
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
