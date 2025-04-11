@@ -11,15 +11,19 @@ import Navbar from './components/Navbar';
 function App() {
   return (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/news" element={<News />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/Login" element={<Login/>} />
-        <Route path="/Register" element={<Register/>} />
-      </Routes>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Navbar />
+        <main className="pt-16">
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Login/>} />
+            <Route path="/register" element={<Register/>} />
+          </Routes>
+        </main>
+      </div>
     </Router>
   );
 }

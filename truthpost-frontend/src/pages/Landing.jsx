@@ -1,94 +1,180 @@
-import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { ArrowRightIcon, ShieldCheckIcon, DocumentCheckIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 
-function Landing() {
-  const navigate = useNavigate();
+const Landing = () => {
+  const features = [
+    {
+      icon: <ShieldCheckIcon className="h-8 w-8" />,
+      title: "Deepfake Detection",
+      description: "Advanced AI-powered detection of manipulated images and videos"
+    },
+    {
+      icon: <DocumentCheckIcon className="h-8 w-8" />,
+      title: "Fake News Analysis",
+      description: "Comprehensive analysis of news articles for authenticity"
+    },
+    {
+      icon: <ChartBarIcon className="h-8 w-8" />,
+      title: "Real-time Verification",
+      description: "Instant verification of content with detailed reports"
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-8 relative overflow-hidden">
-      {/* Animated background elements with images */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-50 -top-48 -left-48 animate-float overflow-hidden">
-          <img 
-            src="https://source.unsplash.com/random/800x800?tech" 
-            alt="background" 
-            className="w-full h-full object-cover opacity-50"
-          />
-        </div>
-        <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-50 -bottom-48 -right-48 animate-float-delayed overflow-hidden">
-          <img 
-            src="https://source.unsplash.com/random/800x800?data" 
-            alt="background" 
-            className="w-full h-full object-cover opacity-50"
-          />
-        </div>
-      </div>
-
-      <div className="relative z-10 text-center max-w-4xl space-y-8 animate-fadeIn">
-        <h1 className="text-7xl md:text-8xl font-bold bg-gradient-to-r from-gray-100 via-gray-300 to-gray-500 bg-clip-text text-transparent">
-          BLACK-N-WHITE
-        </h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mt-8">
-          {/* Feature Cards */}
-          <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl p-6 border border-gray-700 hover:border-gray-500 transition-all">
-            <h3 className="text-xl font-semibold text-gray-200 mb-4">AI-Powered Verification</h3>
-            <p className="text-gray-400">Advanced algorithms analyze content for authenticity, ensuring every piece of information maintains absolute integrity.</p>
-          </div>
-
-          <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl p-6 border border-gray-700 hover:border-gray-500 transition-all">
-            <h3 className="text-xl font-semibold text-gray-200 mb-4">Dual-Analysis System</h3>
-            <p className="text-gray-400">Comprehensive examination of both text and media content, providing transparent credibility scores for complete transparency.</p>
-          </div>
-
-          <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl p-6 border border-gray-700 hover:border-gray-500 transition-all">
-            <h3 className="text-xl font-semibold text-gray-200 mb-4">Factual Community</h3>
-            <p className="text-gray-400">Join a network committed to precision, combating information overload with curated, verified content in its purest form.</p>
-          </div>
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-6 justify-center mt-12">
-          <button
-            onClick={() => navigate('/login')}
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
           >
-            Login
-          </button>
-          
-          <button
-            onClick={() => navigate('/Register')}
-            className="px-8 py-3 border-2 border-gray-600 text-gray-300 rounded-full font-semibold hover:border-gray-400 hover:text-white transition-all duration-300 transform hover:scale-105"
-          >
-            Sign Up
-          </button>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                DeepShield
+              </span>
+              <br />
+              Your Shield Against Digital Deception
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+              Advanced AI-powered platform for detecting deepfakes and fake news. Protect yourself from digital manipulation.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  to="/Register"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                >
+                  Get Started
+                  <ArrowRightIcon className="ml-2 h-5 w-5" />
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  to="/news"
+                  className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
+                  Explore News
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
-      </div>
+      </section>
 
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes float {
-          0% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-50px) rotate(5deg); }
-          100% { transform: translateY(0px) rotate(0deg); }
-        }
+      {/* Features Section */}
+      <section className="py-20 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Powerful Features
+            </h2>
+            <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
+              Everything you need to verify digital content
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                className="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="text-indigo-600 dark:text-indigo-400 mb-4">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        .animate-fadeIn {
-          animation: fadeIn 3s ease-out;
-        }
+      {/* Stats Section */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="p-6"
+            >
+              <div className="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">
+                99.9%
+              </div>
+              <div className="text-gray-600 dark:text-gray-300">
+                Accuracy Rate
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="p-6"
+            >
+              <div className="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">
+                1M+
+              </div>
+              <div className="text-gray-600 dark:text-gray-300">
+                Content Analyzed
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="p-6"
+            >
+              <div className="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">
+                24/7
+              </div>
+              <div className="text-gray-600 dark:text-gray-300">
+                Real-time Analysis
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
-        .animate-float {
-          animation: float 15s ease-in-out infinite;
-        }
-
-        .animate-float-delayed {
-          animation: float 15s ease-in-out infinite 2s;
-        }
-      `}</style>
+      {/* CTA Section */}
+      <section className="py-20 bg-indigo-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Ready to Protect Your Digital World?
+            </h2>
+            <p className="text-xl text-indigo-100 mb-8">
+              Join thousands of users who trust TruthPost for content verification
+            </p>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/Register"
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50"
+              >
+                Start Free Trial
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
-}
+};
 
 export default Landing;
